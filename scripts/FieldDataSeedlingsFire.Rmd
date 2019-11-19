@@ -1,0 +1,76 @@
+---
+title: "Pico Seedlings"
+author: "Anna Talucci"
+date: "November 18, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+# Packages
+
+The following Packages are required for the below analyses:
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(RColorBrewer)
+```
+
+# Data
+
+```{r}
+data = read.csv("../data/SeedlingCts_FireSeverity.csv", header = TRUE, sep = ",", strip.white = TRUE)
+head(data)
+```
+```{r}
+data$seedling.area
+```
+
+```{r}
+subplot = data %>% filter(seedling.area == 4) %>%
+  mutate(density = (seedling.ct * 25)) %>%
+  mutate(area = 100)
+```
+
+```{r}
+quad1 = data %>% filter(seedling.area == 52) %>%
+  mutate(density = (seedling.ct * 1.92)) %>%
+  mutate(area = 100)
+```
+
+```{r}
+quad2 = data %>% filter(seedling.area == 51) %>%
+  mutate(density = (seedling.ct * 1.96)) %>%
+  mutate(area = 100)
+```
+
+```{r}
+plot = data %>% filter(seedling.area == 100) %>%
+  mutate(density = (seedling.ct)) %>%
+  mutate(area = 100)
+```
+
+```{r}
+data2 = rbind(subplot, quad1, quad2, plot)
+```
+
+```{r}
+summary(data2)
+```
+
+```{r}
+data3 = data2 %>% 
+  mutate(density_100 = round(density)) 
+
+```
+
+```{r}
+ggplot(data = data3, aes(x=fire.type, y=density_100, color = fire.type)) +
+  geom_point()
+```
+
