@@ -33,25 +33,25 @@ data$seedling.area
 
 ```{r}
 subplot = data %>% filter(seedling.area == 4) %>%
-  mutate(density = (seedling.ct * 25)) %>%
+  mutate(seed_ct_100 = round(seedling.ct * 25)) %>%
   mutate(area = 100)
 ```
 
 ```{r}
 quad1 = data %>% filter(seedling.area == 52) %>%
-  mutate(density = (seedling.ct * 1.92)) %>%
+  mutate(seed_ct_100 = round(seedling.ct * 1.92)) %>%
   mutate(area = 100)
 ```
 
 ```{r}
 quad2 = data %>% filter(seedling.area == 51) %>%
-  mutate(density = (seedling.ct * 1.96)) %>%
+  mutate(seed_ct_100 = round(seedling.ct * 1.96)) %>%
   mutate(area = 100)
 ```
 
 ```{r}
 plot = data %>% filter(seedling.area == 100) %>%
-  mutate(density = (seedling.ct)) %>%
+  mutate(seed_ct_100 = (seedling.ct)) %>%
   mutate(area = 100)
 ```
 
@@ -63,14 +63,12 @@ data2 = rbind(subplot, quad1, quad2, plot)
 summary(data2)
 ```
 
-```{r}
-data3 = data2 %>% 
-  mutate(density_100 = round(density)) 
 
-```
 
 ```{r}
-ggplot(data = data3, aes(x=fire.type, y=density_100, color = fire.type)) +
-  geom_point()
+ggplot(data=data2, aes(x=seed_ct_100, fill = fire.type)) +
+    geom_density(alpha=0.3) +
+  scale_fill_brewer(palette="Accent") +
+  theme_bw()
 ```
 
